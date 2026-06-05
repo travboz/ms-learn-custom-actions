@@ -1,10 +1,11 @@
-name: Test the custom Composite action
+name: Testing the 'my-composite-action' custom Composite action
 run-name: ${{ github.actor }} is taking the custom Composite action out for a spin! 🏎️
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:

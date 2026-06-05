@@ -1,0 +1,15 @@
+name: Using scripts and passing on their outputs from custom actions
+description: This action outputs results from a script
+
+outputs:
+  script-result:
+    description: Result from the script
+    value: ${{ steps.run-script.outputs.result }}
+
+runs:
+  using: composite
+  steps:
+    - name: Run my-script.sh
+      id: run-script
+      run: echo "result=$(./scripts/my-script.sh)" >> $GITHUB_OUTPUT
+      shell: bash
