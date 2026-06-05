@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository # need to checkout the repo otherwise we do not know where the action's code is
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
       - name: Use my composite action
         # this is the relative path to where our action lives in this repo
         uses: ./.github/actions/my-composite-action
