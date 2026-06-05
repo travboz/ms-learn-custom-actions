@@ -1,0 +1,19 @@
+name: Test the custom Composite action
+run-name: ${{ github.actor }} is taking the custom Composite action out for a spin! 🏎️
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use my composite action
+        # this is the relative path to where our action lives in this repo
+        uses: ./.github/actions/my-composite-action
+        # if our composite action is shared from another repository, we reference it like this:
+        # uses: owner/repository/.github/actions/my-composite-action@v1
+        with:
+          node-version: "18"
