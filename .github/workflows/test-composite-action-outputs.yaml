@@ -17,7 +17,7 @@ jobs:
       - name: Use my composite action
         id: my-action
         # this is the relative path to where our action lives in this repo
-        uses: ./.github/actions/my-outputs-
+        uses: ./.github/actions/my-outputs-action
 
       - name: Display the output result of the composite action
         # Access the output script-result using the steps.<step-id>.outputs.<output-name> syntax.
