@@ -1,5 +1,7 @@
 const core = require("@actions/core");
 const { execSync } = require("child_process");
+const path = require("path");
+const fs = require("fs");
 
 async function run() {
     try {
@@ -19,6 +21,10 @@ async function run() {
 
         // Run the installation
         execSync(command, { stdio: "inherit" });
+
+        // Add the installation directory to PATH
+        const golangciBinPath = path.join(process.env.HOME, "go", "bin");
+        core.addPath(golangciBinPath);
 
         console.log("golangci-lint installed successfully.");
     } catch (error) {
