@@ -1,0 +1,24 @@
+name: Test installing and set up of a CLI tool not provided on runners
+
+on:
+  push:
+    branches:
+      - main
+      - feature/*
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - name: Install golangci-lint linter
+        uses: "./.github/actions/my-cli-action"
+        with:
+          version: "2.1.2"
+
+      - name: Verify CLI installation
+        run: |
+          echo "Chcecking golangci-lint version..."
+          golangci-lint --version
