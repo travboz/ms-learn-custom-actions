@@ -6,6 +6,8 @@ on:
       - main
       - feature/*
 
+  workflow_dispatch:
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -17,6 +19,9 @@ jobs:
         uses: "./.github/actions/my-cli-action"
         with:
           version: "2.1.2"
+
+      - name: Setup tmate session to allow SSH into runner
+        uses: mxschmitt/action-tmate@35b54afac29c97fb54faba5b513f8fbd1882f113 # v3.24
 
       - name: Verify CLI installation
         run: |
