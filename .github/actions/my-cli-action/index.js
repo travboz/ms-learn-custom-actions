@@ -23,7 +23,7 @@ async function run() {
         execSync(command, { stdio: "inherit" });
 
         // Add the installation directory to PATH
-        const golangciBinPath = path.join(process.env.HOME, "go", "bin");
+        const golangciBinPath = path.join(process.env.HOME, ".local", "bin");
         core.addPath(golangciBinPath);
 
         console.log("golangci-lint installed successfully.");
