@@ -34,6 +34,10 @@ jobs:
         with:
           version: ${{ inputs.version }}
 
+      - name: Add golangci-lint to PATH (cache hit)
+        if: steps.cache-golangci-lint.outputs.cache-hit == 'true'
+        run: echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
+
       # Used for SSH debugging
       # - name: Setup tmate session to allow SSH into runner
       #   uses: mxschmitt/action-tmate@35b54afac29c97fb54faba5b513f8fbd1882f113 # v3.24
