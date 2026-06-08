@@ -1,30 +1,31 @@
 const core = require("@actions/core");
 const { execSync } = require("child_process");
 const path = require("path");
-const fs = require("fs");
 
 async function run() {
     try {
-        // Change required to false so 'latest' fallback actually works
+        // Get the version input, defaulting to empty string if not provided
         const inputVersion = core.getInput("version", { required: false }) || "";
-        let command = "curl -sSfL https://golangci-lint.run/install.sh | sh -s";
 
-        // If a version is provided, append it with a 'v' prefix
+        // Install into $GITHUB_WORKSPACE/bin — the -b flag tells the install script
+        // exactly where to put the binary, so our core.addPath call always matches
+        const installDir = path.join(process.env.GITHUB_WORKSPACE, "bin");
+        let command = `curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b ${installDir}`;
+
         if (inputVersion.trim().length === 0) {
             console.log("Installing latest golangci-lint version...");
         } else {
             console.log(`Installing golangci-lint v${inputVersion}...`);
-            // Ensure we don't accidentally double-prefix if user typed 'v2.12.2'
+            // Normalise version string — accept both '2.1.2' and 'v2.1.2'
             const cleanVersion = inputVersion.startsWith("v") ? inputVersion : `v${inputVersion}`;
-            command += ` -- ${cleanVersion}`;
+            command += ` ${cleanVersion}`;
         }
 
-        // Run the installation
+        // Run the install script, streaming output directly to the runner logs
         execSync(command, { stdio: "inherit" });
 
-        // Add the installation directory to PATH
-        const golangciBinPath = path.join(process.env.HOME, ".local", "bin");
-        core.addPath(golangciBinPath);
+        // Add the install directory to PATH for all subsequent steps in this job
+        core.addPath(installDir);
 
         console.log("golangci-lint installed successfully.");
     } catch (error) {
