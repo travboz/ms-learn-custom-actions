@@ -7,6 +7,12 @@ on:
       - feature/*
 
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Version for CLI to pass into custom action"
+        required: true
+        default: "2.1.2"
+        type: string
 
 jobs:
   test:
@@ -15,13 +21,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
+      - name: Cache golangci-lint
+        id: cache-golangci-lint
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/bin/golangci-lint
+          key: golangci-lint-${{ runner.os }}-${{ inputs.version }}
+
       - name: Install golangci-lint linter
+        if: steps.cache-golangci-lint.outputs.cache-hit != 'true'
         uses: "./.github/actions/my-cli-action"
         with:
-          version: "2.1.2"
+          version: ${{ inputs.version }}
 
-      - name: Setup tmate session to allow SSH into runner
-        uses: mxschmitt/action-tmate@35b54afac29c97fb54faba5b513f8fbd1882f113 # v3.24
+      # Used for SSH debugging
+      # - name: Setup tmate session to allow SSH into runner
+      #   uses: mxschmitt/action-tmate@35b54afac29c97fb54faba5b513f8fbd1882f113 # v3.24
 
       - name: Verify CLI installation
         run: |
